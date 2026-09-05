@@ -3,20 +3,26 @@
  * Router, Auth listener, Theme, Service Worker
  */
 
-import { Navbar }  from './components/navbar.js';
-import { Footer }  from './components/footer.js';
-import { Search }  from './components/search.js';
-import { Toast }   from './components/toast.js';
-import { Auth }    from './components/auth.js';
+import { Navbar }        from './components/navbar.js';
+import { Footer }        from './components/footer.js';
+import { Search }        from './components/search.js';
+import { Toast }         from './components/toast.js';
+import { Auth }          from './components/auth.js';
+import { Notifications } from './components/notifications.js';
 
 // ─── Route Map ─────────────────────────────────────────────
 const ROUTES = {
-  '/'         : () => import('./pages/home.js').then(m => m.renderHome()),
-  '/blog'     : () => import('./pages/blog.js').then(m => m.renderBlog()),
-  '/blog/:id' : () => import('./pages/post.js').then(m => m.renderPost()),
-  '/auth'     : () => import('./pages/auth.js').then(m => m.renderAuth()),
-  '/profile'  : () => import('./pages/profile.js').then(m => m.renderProfile()),
-  '/404'      : () => import('./pages/404.js').then(m => m.render404()),
+  '/'                       : () => import('./pages/home.js').then(m => m.renderHome()),
+  '/blog'                   : () => import('./pages/blog.js').then(m => m.renderBlog()),
+  '/blog/:id'               : () => import('./pages/post.js').then(m => m.renderPost()),
+  '/auth'                   : () => import('./pages/auth.js').then(m => m.renderAuth()),
+  '/profile'                : () => import('./pages/profile.js').then(m => m.renderProfile()),
+  // ── Phase 2 ──
+  '/learn'                  : () => import('./pages/learn.js').then(m => m.renderLearn()),
+  '/course/:id'             : () => import('./pages/course.js').then(m => m.renderCourse()),
+  '/course/:id/lesson/:lessonId': () => import('./pages/lesson.js').then(m => m.renderLesson()),
+  '/tools'                  : () => import('./pages/tools.js').then(m => m.renderTools()),
+  '/404'                    : () => import('./pages/404.js').then(m => m.render404()),
 };
 
 // ─── App Object ────────────────────────────────────────────
@@ -37,6 +43,7 @@ export const App = {
     onAuthStateChanged(window.__firebase.auth, user => {
       window.__user = user || null;
       Navbar.updateAuthState(user);
+      if (user) Notifications.init();
     });
 
     // Router setup
