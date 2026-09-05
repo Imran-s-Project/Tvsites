@@ -1,6 +1,10 @@
 /**
  * Single Post Page — Firestore থেকে পোস্ট লোড + Markdown render
+ * Phase 2: Comments + Bookmark
  */
+import { Comments } from '../components/comments.js';
+import { Bookmark } from '../components/bookmark.js';
+
 export async function renderPost() {
   const id = window.__routeParams?.id;
   const el = document.getElementById('page-content');
@@ -42,28 +46,21 @@ export async function renderPost() {
 
           <div class="post-footer-actions">
             <button class="btn btn-ghost" onclick="history.back()">← ফিরে যান</button>
-            ${window.__user ? `
-              <button class="btn btn-outline" onclick="PostPage.bookmark()">🔖 সেভ করুন</button>
-            ` : ''}
+            ${Bookmark.buttonHTML(id)}
           </div>
+
+          <!-- Comments -->
+          ${await Comments.render(id)}
         </div>
       </article>
     `;
 
-    window.PostPage = {
-      async bookmark() {
-        if (!window.__user) { window.App.navigate('/auth'); return; }
-        try {
-          const { setDoc, doc: firestoreDoc } =
-            await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-          await setDoc(
-            firestoreDoc(window.__firebase.db, 'bookmarks', `${window.__user.uid}_${id}`),
-            { uid: window.__user.uid, post, savedAt: new Date() }
-          );
-          window.Toast.show('বুকমার্ক সেভ হয়েছে!', 'success');
-        } catch { window.Toast.show('সেভ করা যায়নি।', 'error'); }
-      }
-    };
+    // Load comments & bookmark state in parallel
+    Comments.load(id);
+    Bookmark.isSaved(id).then(saved => {
+      const btn = document.getElementById(`bm-btn-${id}`);
+      if (btn && saved) btn.classList.add('saved');
+    });
 
   } catch (err) {
     el.innerHTML = `<div class="error-page">
