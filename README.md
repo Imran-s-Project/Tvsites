@@ -104,12 +104,21 @@ vercel
 
 ---
 
-## ফেজ ২ তে যা যোগ হবে
-- [ ] Learning / Course section
-- [ ] Comments system
-- [ ] Push Notifications (FCM)
-- [ ] Bookmark system (Firestore)
-- [ ] Admin Dashboard
+## ফেজ ২ — সম্পন্ন ✅
+- [x] Learning Hub — Course listing + progress tracking
+- [x] Course Detail — Lesson list, enroll, progress bar
+- [x] Lesson Reader — Mark complete, sidebar navigation
+- [x] Comments — Nested, Like, Reply, spam filter
+- [x] Notifications — FCM push + in-app bell
+- [x] Bookmark — Save/unsave posts (Firestore)
+- [x] Tools Directory — Tech Verse projects catalog
+
+## ফেজ ৩ তে যা আসছে
+- [ ] Admin Dashboard (post/course management)
+- [ ] AI-powered search & content suggestions
+- [ ] Newsletter (EmailJS / Mailchimp)
+- [ ] SEO — sitemap.xml, meta, Open Graph
+- [ ] Firebase Analytics Dashboard
 
 ---
 
