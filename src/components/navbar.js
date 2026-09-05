@@ -48,6 +48,9 @@ export const Navbar = {
             </svg>
           </button>
 
+          <!-- Notification Bell (Phase 2) -->
+          <div id="notif-slot"></div>
+
           <div id="auth-area" class="auth-area">
             <a href="/auth" class="nav-btn btn-primary">লগইন</a>
           </div>
@@ -64,6 +67,18 @@ export const Navbar = {
   },
 
   updateAuthState(user) {
+    // Notification bell
+    const slot = document.getElementById('notif-slot');
+    if (slot) {
+      if (user) {
+        import('./notifications.js').then(({ Notifications }) => {
+          slot.innerHTML = Notifications.bellHTML();
+        });
+      } else {
+        slot.innerHTML = '';
+      }
+    }
+
     const area = document.getElementById('auth-area');
     if (!area) return;
     if (user) {
